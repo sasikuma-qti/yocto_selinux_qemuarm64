@@ -1,0 +1,51 @@
+header:
+  version: 14
+
+repos:
+  oe-core:
+    url: https://github.com/openembedded/openembedded-core
+    refspec: master
+    layers:
+      meta:
+
+  bitbake:
+    url: https://github.com/openembedded/bitbake
+    refspec: master
+    layers:
+      .: disabled
+
+  meta-yocto:
+    url: https://git.yoctoproject.org/meta-yocto
+    refspec: master
+    layers:
+      meta-poky:
+
+  meta-python:
+    url: https://git.openembedded.org/meta-openembedded/
+    refspec: master
+    layers:
+      meta-python:
+      meta-oe:
+
+  meta-selinux:
+    branch: master
+    url: https://git.yoctoproject.org/meta-selinux
+    layers:
+      .:
+
+machine: qemuarm64
+
+target:
+  - core-image-selinux
+
+local_conf_header:
+  enable-selinux: |
+    DISTRO_FEATURES:append = " selinux"
+  selinux-provider: |
+    PREFERRED_PROVIDER_virtual/refpolicy = "refpolicy-targeted"
+  selinux-status: |
+    DEFAULT_ENFORCING ?= "permissive"
+  selinux-extras: |
+    IMAGE_CMD_TAR:append = " --selinux"
+  image-fstype: |
+    IMAGE_FSTYPES = "ext4"
